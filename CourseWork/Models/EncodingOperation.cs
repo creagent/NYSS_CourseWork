@@ -55,17 +55,23 @@ namespace CourseWork.Models
                 {
                     UploadButtonPressed = false;
 
-                    if (EncAction == EncodingAction.Encode)
+                    try
                     {
-                        ResultText = EncoderInstance.Encode(Text);
+                        if (EncAction == EncodingAction.Encode)
+                        {
+                            ResultText = EncoderInstance.Encode(Text);
+                        }
+                        else
+                        {
+                            ResultText = EncoderInstance.Decode(Text);
+                        }
+                        var path = _context.Server.MapPath(FILES_DIRECTORY + RESULT_TEXT_FILE_NAME);
+                        File.WriteAllText(path, ResultText);
                     }
-                    else
+                    catch
                     {
-                        ResultText = EncoderInstance.Decode(Text);
+                        ResultText = "";
                     }
-
-                    var path = _context.Server.MapPath(FILES_DIRECTORY + RESULT_TEXT_FILE_NAME);
-                    File.WriteAllText(path, ResultText);
                 }
             }
         }
