@@ -63,6 +63,7 @@ namespace CourseWork.Utils
         {
             Alphabet = _alphabets[language];
 
+            key = key.Trim();
             if (IsValidKey(key))
             {
                 Key = key.ToLower();

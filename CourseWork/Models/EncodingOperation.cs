@@ -22,11 +22,11 @@ namespace CourseWork.Models
             get => _key;
             set
             {
-                _key = value;
                 try
                 {
                     EncoderInstance = new Encoder(value, Language);
                     IsValidKey = true;
+                    _key = value;
                 }
                 catch
                 {
