@@ -1,0 +1,213 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="~/Content/bootstrap.css" />
+    <link rel="stylesheet" href="~/Content/Site.css" />
+    <link rel="stylesheet" href="~/Content/bootstrap.min.css" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Кодировщик</title>
+</head>
+<body>
+    @using (Html.BeginForm("Main", "Home", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal", role = "form" }))
+    {
+        <div class="form-group">
+            <label for="Language" class="col-md-offset-4">Алфавит</label>
+            @if (ViewBag.EncodingOperation.Language == CourseWork.Utils.EncodingLanguage.English)
+            {
+                <select id="Language" name="Language" class="col-md-offset-4 form-control">
+                    <option value="@CourseWork.Utils.EncodingLanguage.English">Английский</option>
+                    <option value="@CourseWork.Utils.EncodingLanguage.Russian">Русский</option>
+                </select>
+            }
+            else
+            {
+                <select id="Language" name="Language" class="col-md-offset-4 form-control">
+                    <option value="@CourseWork.Utils.EncodingLanguage.Russian">Русский</option>
+                    <option value="@CourseWork.Utils.EncodingLanguage.English">Английский</option>
+                </select>
+            }
+
+        </div>
+        <div class="col-md-offset-4">
+            @if (ViewBag.EncodingOperation.EncAction == @CourseWork.Models.EncodingAction.Decode)
+            {
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="EncAction" value="@CourseWork.Models.EncodingAction.Encode" id="encode">
+                    <label class="form-check-label" for="encode">Зашифровать</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="EncAction" id="decode" value="@CourseWork.Models.EncodingAction.Decode" checked>
+                    <label class="form-check-label" for="decode">Расшифровать</label>
+                </div>
+            }
+            else
+            {
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="EncAction" value="@CourseWork.Models.EncodingAction.Encode" id="encode" checked>
+                    <label class="form-check-label" for="encode">Зашифровать</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="EncAction" id="decode" value="@CourseWork.Models.EncodingAction.Decode">
+                    <label class="form-check-label" for="decode">Расшифровать</label>
+                </div>
+            }
+        </div>
+        <div class="form-group">
+            <label for="Key" class="col-md-offset-4">Ключ</label>
+            @if (ViewBag.EncodingOperation.Key == null)
+            {
+                <input id="Key" type="text" class="col-md-offset-4 form-control" required maxlength="20" name="Key" value="скорпион" autocomplete="off" />
+            }
+            else
+            {
+                <input id="Key" type="text" class="col-md-offset-4 form-control" required maxlength="20" name="Key" value=@ViewBag.EncodingOperation.Key autocomplete="off" />
+            }
+            @if (ViewBag.EncodingOperation.IsValidKey == false)
+            {
+                <p class="col-md-offset-4" style="color: red">Некорректный ключ</p>
+            }
+        </div>
+        <div class="form-group">
+            @if (ViewBag.EncodingOperation.Text == null)
+            {
+                <label for="TextDefault" class="col-md-offset-4">Введите текст</label>
+                <textarea class="form-control col-md-offset-4" id="TextDefault" rows="8" maxlength="1000" name="Text" cols="10" required>Си шарп - лучший язык программирования</textarea>
+            }
+            else
+            {
+                <label for="TextCustom" class="col-md-offset-4">Введите текст</label>
+                <textarea class="form-control col-md-offset-4" id="TextCustom" rows="8" maxlength="1000" name="Text" cols="50" required>@ViewBag.EncodingOperation.Text</textarea>
+            }
+            @if (ViewBag.EncodingOperation.ResultText == null || !ViewBag.EncodingOperation.IsValidKey)
+            {
+                <label for="ResultDefault" class="col-md-offset-4">Результат</label>
+                <textarea class="form-control col-md-offset-4" id="ResultDefault" rows="8" maxlength="1000" name="ResultText" cols="50"></textarea>
+            }
+            else
+            {
+                <label for="ResultDefault" class="col-md-offset-4">Результат</label>
+                <textarea class="form-control col-md-offset-4" id="ResultText" rows="8" maxlength="1000" name="ResultText" cols="50">@ViewBag.EncodingOperation.ResultText</textarea>
+            }
+        </div>
+        <div class="col-md-offset-4">
+            @if (ViewBag.EncodingOperation.ResultText != null && ViewBag.EncodingOperation.ResultText != "")
+            {
+                <a href="/././Home/DownloadFile" style="background-color: green; width: 270px;" class="btn btn-primary">Скачать файл</a><br /><br />
+            }
+        </div>
+        <div class="row">
+            <div class="col-md-3 col-md-offset-4">
+                <p><b>Или загрузите файл с текстом <br /> в формате .docx или .txt</b></p>
+                <input type="file" name="UploadedFile" /> <br />
+                <button name="ButtonAction" class="btn" style="background-color: gainsboro; padding: 2px;" type="submit" value="@CourseWork.Models.FormAction.Upload">Загрузить</button>
+                @if (ViewBag.EncodingOperation.UploadButtonPressed == true && ViewBag.EncodingOperation.FileIsRead == false)
+                {
+                    <p style="color: red">Файл не был загружен или имеет неверный формат</p>
+                }
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-md-offset-4">
+                <br>
+                <p><button class="btn-primary btn" style="width: 280px;" name="ButtonAction" type="submit" value="@CourseWork.Models.FormAction.Run">Запустить</button></p>
+            </div>
+        </div>
+    }
+
+    @*<div>
+            @using (Html.BeginForm("Main", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                <table>
+                    <tr>
+                        <td>
+                            Алфавит
+                            <select name="Language">
+                                <option value="@CourseWork.Utils.EncodingLanguage.Russian">Русский</option>
+                                <option value="@CourseWork.Utils.EncodingLanguage.English">Английский</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Html.RadioButton("EncAction", CourseWork.Models.EncodingAction.Encode, true)
+                            <span>Зашифровать</span>
+                            @Html.RadioButton("EncAction", CourseWork.Models.EncodingAction.Decode)
+                            <span>Расшифровать</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p><b>Ключ</b></p>
+                            @if (ViewBag.EncodingOperation.Key == null)
+                            {
+                                <p><input type="text" required maxlength="20" name="Key" value="скорпион" autocomplete="off" /></p>
+                            }
+                            else
+                            {
+                                <p><input type="text" required maxlength="20" name="Key" value=@ViewBag.EncodingOperation.Key autocomplete="off" /></p>
+                            }
+                            @if (ViewBag.EncodingOperation.IsValidKey == false)
+                            {
+                                <p style="color: red">Некорректный ключ</p>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p><b>Введите текст</b></p>
+                            @if (ViewBag.EncodingOperation.Text == null)
+                            {
+                                <p><textarea id="text" maxlength="1000" name="Text" value="" cols="50" rows="8" required>Си шарп - лучший язык программирования</textarea></p>
+                            }
+                            else
+                            {
+                                <p><textarea id="text" maxlength="1000" name="Text" value="" cols="50" rows="8" required>@ViewBag.EncodingOperation.Text</textarea></p>
+                            }
+                        </td>
+                        <td>
+                            <p><b>Результат</b></p>
+                            @if (ViewBag.EncodingOperation.ResultText == null || !ViewBag.EncodingOperation.IsValidKey)
+                            {
+                                <p><textarea id="ResultText" cols="50" rows="8" readonly></textarea></p>
+                            }
+                            else
+                            {
+                                <p><textarea id="ResultText" readonly cols="50" rows="8">@ViewBag.EncodingOperation.ResultText</textarea></p>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p><b>Или загрузите файл с текстом <br /> в формате .docx или .txt</b></p>
+                            <p>
+                                <input type="file" name="UploadedFile" /><br />
+                                <button name="ButtonAction" type="submit" value="@CourseWork.Models.FormAction.Upload">Загрузить</button>
+                                @if (ViewBag.EncodingOperation.UploadButtonPressed == true && ViewBag.EncodingOperation.FileIsRead == false)
+                                {
+                                <p style="color: red">Файл не был загружен или имеет неверный формат</p>
+                            }
+                            </td>
+                            <td>
+                                @if (ViewBag.EncodingOperation.ResultText != null)
+                                {
+                                    <p>@Html.ActionLink("Скачать файл", "DownloadFile", "Home")</p>
+                                }
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <button name="ButtonAction" type="submit" value="@CourseWork.Models.FormAction.Run">Запустить</button>
+                            </td>
+                        </tr>
+                    </table>
+                }
+        </div>*@
+</body>
+</html>
