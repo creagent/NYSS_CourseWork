@@ -18,7 +18,8 @@ namespace CourseWork.Controllers
         public ViewResult Main()
         {
             ViewBag.Title = _TITLE;
-            ViewBag.EncodingOperation = new EncodingOperation();
+            var operation = new EncodingOperation();
+            ViewBag.EncodingOperation = operation;
             return View("Main");
         }
 

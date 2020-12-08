@@ -8,24 +8,36 @@ namespace CourseWork.Models
 {
     public class EncodingOperation
     {
-        public static readonly string FILES_DIRECTORY = "~/Files/";
-        public static readonly string RESULT_TEXT_FILE_NAME = "ResultText.txt";
+        public const string FILES_DIRECTORY = "~/Files/";
+        public const string RESULT_TEXT_FILE_NAME = "ResultText.txt";
+        public const string DEFAULT_TEXT = "Си шарп - лучший язык программирования";
 
         private HttpContext _context = HttpContext.Current;
         private string _key;
         private HttpPostedFileBase _uploadedFile;
         private FormAction _buttonAction;
+        private string _text;
 
         public EncodingLanguage Language { get; set; }
         public string Key
         {
-            get => _key;
+            get
+            {
+                if (IsValidKey && _key != null)
+                {
+                    return _key;
+                }
+                else
+                {
+                    return Encoder.DEFAULT_KEY;
+                }
+            }
             set
             {
                 try
                 {
-                    EncoderInstance = new Encoder(value, Language);
                     IsValidKey = true;
+                    EncoderInstance = new Encoder(value, Language);
                     _key = value;
                 }
                 catch
@@ -36,7 +48,21 @@ namespace CourseWork.Models
         }
         public Encoder EncoderInstance { get; private set; }
         public EncodingAction EncAction { get; set; }
-        public string Text { get; set; }
+        public string Text
+        {
+            get 
+            {
+                if (_text == null || _text == "")
+                {
+                    return DEFAULT_TEXT;
+                }
+                else
+                {
+                    return _text;
+                }
+            } 
+            set => _text = value; 
+        }
         public string ResultText { get; set; }
         public bool UploadButtonPressed { get; set; }
         public bool IsValidKey { get; set; } = true;
@@ -86,7 +112,7 @@ namespace CourseWork.Models
                     _uploadedFile = value;
 
                     string uploadedFileText = "";
-                    
+
                     if (_uploadedFile.FileName.EndsWith(".txt"))
                     {
                         var path = _context.Server.MapPath(FILES_DIRECTORY + "Uploaded.txt");

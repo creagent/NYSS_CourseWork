@@ -58,30 +58,18 @@
         </div>
         <div class="form-group">
             <label for="Key" class="col-md-offset-4">Ключ</label>
-            @if (ViewBag.EncodingOperation.Key == null || ViewBag.EncodingOperation.Key == "")
-            {
-                <input id="Key" type="text" class="col-md-offset-4 form-control" required maxlength="20"  autocomplete="off" name="Key" value="скорпион"/>
-            }
-            else
-            {
-                <input id="Key" type="text" class="col-md-offset-4 form-control" required maxlength="20" name="Key" value=@ViewBag.EncodingOperation.Key autocomplete="off" />
-            }
+
+            <input id="Key" type="text" class="col-md-offset-4 form-control" required maxlength="20" name="Key" value=@ViewBag.EncodingOperation.Key autocomplete="off" />
             @if (ViewBag.EncodingOperation.IsValidKey == false)
             {
                 <p class="col-md-offset-4" style="color: red">Некорректный ключ</p>
             }
         </div>
         <div class="form-group">
-            @if (ViewBag.EncodingOperation.Text == null)
-            {
-                <label for="TextDefault" class="col-md-offset-4">Введите текст</label>
-                <textarea class="form-control col-md-offset-4" id="TextDefault" rows="8" maxlength="1000" name="Text" cols="10" required>Си шарп - лучший язык программирования</textarea>
-            }
-            else
-            {
-                <label for="TextCustom" class="col-md-offset-4">Введите текст</label>
-                <textarea class="form-control col-md-offset-4" id="TextCustom" rows="8" maxlength="1000" name="Text" cols="50" required>@ViewBag.EncodingOperation.Text</textarea>
-            }
+
+            <label for="TextCustom" class="col-md-offset-4">Введите текст</label>
+            <textarea class="form-control col-md-offset-4" id="TextCustom" rows="8" maxlength="1000" name="Text" cols="50" required>@ViewBag.EncodingOperation.Text</textarea>
+
             @if (ViewBag.EncodingOperation.ResultText == null || !ViewBag.EncodingOperation.IsValidKey)
             {
                 <label for="ResultDefault" class="col-md-offset-4">Результат</label>

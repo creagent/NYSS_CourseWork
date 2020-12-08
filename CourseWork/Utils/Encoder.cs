@@ -5,6 +5,8 @@ namespace CourseWork.Utils
 {
     public class Encoder
     {
+        public const string DEFAULT_KEY = "скорпион";
+
         private int _sign = 1;
         private string _key;
         private string _alphabet;
@@ -59,7 +61,7 @@ namespace CourseWork.Utils
             }
         }
 
-        public Encoder(string key = "скорпион", EncodingLanguage language = EncodingLanguage.Russian)
+        public Encoder(string key = DEFAULT_KEY, EncodingLanguage language = EncodingLanguage.Russian)
         {
             Alphabet = _alphabets[language];
 
