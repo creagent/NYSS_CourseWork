@@ -73,12 +73,12 @@
             @if (ViewBag.EncodingOperation.ResultText == null || !ViewBag.EncodingOperation.IsValidKey)
             {
                 <label for="ResultDefault" class="col-md-offset-4">Результат</label>
-                <textarea class="form-control col-md-offset-4" id="ResultDefault" rows="8" maxlength="1000" name="ResultText" cols="50"></textarea>
+                <textarea class="form-control col-md-offset-4" id="ResultDefault" rows="8" maxlength="1000" name="ResultText" readonly cols="50"></textarea>
             }
             else
             {
                 <label for="ResultDefault" class="col-md-offset-4">Результат</label>
-                <textarea class="form-control col-md-offset-4" id="ResultText" rows="8" maxlength="1000" name="ResultText" cols="50">@ViewBag.EncodingOperation.ResultText</textarea>
+                <textarea class="form-control col-md-offset-4" id="ResultText" rows="8" maxlength="1000" name="ResultText" readonly cols="50">@ViewBag.EncodingOperation.ResultText</textarea>
             }
         </div>
         <div class="col-md-offset-4">
