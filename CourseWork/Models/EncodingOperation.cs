@@ -11,8 +11,8 @@ namespace CourseWork.Models
         public const string FILES_DIRECTORY = "~/Files/";
         public const string RESULT_TEXT_FILE_NAME = "ResultText.txt";
         public const string DEFAULT_TEXT = "Си шарп - лучший язык программирования";
+        public static HttpContext Context { get; set; } = HttpContext.Current;
 
-        private HttpContext _context = HttpContext.Current;
         private string _key;
         private HttpPostedFileBase _uploadedFile;
         private FormAction _buttonAction;
@@ -34,6 +34,7 @@ namespace CourseWork.Models
             }
             set
             {
+                Context = HttpContext.Current;
                 try
                 {
                     IsValidKey = true;
@@ -60,8 +61,16 @@ namespace CourseWork.Models
                 {
                     return _text;
                 }
+            }
+            set
+            {
+                if (value.Length > 1000)
+                {
+                    value = value.Substring(0, 1000);
+                }
+
+                _text = value;
             } 
-            set => _text = value; 
         }
         public string ResultText { get; set; }
         public bool UploadButtonPressed { get; set; }
@@ -91,7 +100,7 @@ namespace CourseWork.Models
                         {
                             ResultText = EncoderInstance.Decode(Text);
                         }
-                        var path = _context.Server.MapPath(FILES_DIRECTORY + RESULT_TEXT_FILE_NAME);
+                        var path = Context.Server.MapPath(FILES_DIRECTORY + RESULT_TEXT_FILE_NAME);
                         File.WriteAllText(path, ResultText);
                     }
                     catch
@@ -113,29 +122,25 @@ namespace CourseWork.Models
 
                     string uploadedFileText = "";
 
+                    FileReader reader = null;
                     if (_uploadedFile.FileName.EndsWith(".txt"))
                     {
-                        var path = _context.Server.MapPath(FILES_DIRECTORY + "Uploaded.txt");
-                        _uploadedFile.SaveAs(path);
-                        uploadedFileText = File.ReadAllText(path);
-                        FileIsRead = true;
+                        reader = new TxtFileReader(_uploadedFile);
                     }
                     else if (_uploadedFile.FileName.EndsWith(".docx"))
                     {
-                        var path = _context.Server.MapPath(FILES_DIRECTORY + "Uploaded.docx");
-                        _uploadedFile.SaveAs(path);
+                        reader = new DocxFileReader(_uploadedFile);
+                    }
 
-                        using (var fs = new FileStream(path, FileMode.Open))
-                        {
-                            var doc = DocX.Load(fs);
-
-                            foreach (var paragraph in doc.Paragraphs)
-                            {
-                                uploadedFileText += paragraph.Text;
-                            }
-                        }
+                    try
+                    {
+                        uploadedFileText = reader.Read();
 
                         FileIsRead = true;
+                    }
+                    catch
+                    {
+                        FileIsRead = false;
                     }
 
                     if (FileIsRead)
@@ -145,6 +150,11 @@ namespace CourseWork.Models
                     }
                 }
             }
+        }
+
+        public EncodingOperation()
+        {
+            Context = HttpContext.Current;
         }
     }
 }
