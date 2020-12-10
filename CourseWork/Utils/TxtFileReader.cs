@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Web;
 
 namespace CourseWork.Utils
@@ -16,7 +17,15 @@ namespace CourseWork.Utils
 
         public override string Read()
         {
-            return File.ReadAllText(path);
+            string result = File.ReadAllText(path);
+            
+            // Извините за настолько наглый костыль)))))
+            if (result.Contains('�'))
+            {
+                result = File.ReadAllText(path, Encoding.Default);
+            }
+
+            return result;
         }
     }
 }
