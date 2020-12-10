@@ -122,20 +122,11 @@ namespace CourseWork.Models
 
                     string uploadedFileText = "";
 
-                    FileReader reader = null;
-                    if (_uploadedFile.FileName.EndsWith(".txt"))
-                    {
-                        reader = new TxtFileReader(_uploadedFile);
-                    }
-                    else if (_uploadedFile.FileName.EndsWith(".docx"))
-                    {
-                        reader = new DocxFileReader(_uploadedFile);
-                    }
-
                     try
                     {
-                        uploadedFileText = reader.Read();
+                        var reader = FileReader.GetFileReader(_uploadedFile);
 
+                        uploadedFileText = reader.Read();
                         FileIsRead = true;
                     }
                     catch

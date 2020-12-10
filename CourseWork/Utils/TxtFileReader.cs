@@ -9,18 +9,14 @@ namespace CourseWork.Utils
 {
     public class TxtFileReader : FileReader
     {
-        private HttpPostedFileBase _file;
-        public TxtFileReader(HttpPostedFileBase file)
+        public TxtFileReader(HttpPostedFileBase file) : base(file)
         {
-            _file = file;
+
         }
 
         public override string Read()
         {
-            var path = EncodingOperation.Context.Server.MapPath(EncodingOperation.FILES_DIRECTORY + "Uploaded.txt");
-            _file.SaveAs(path);
-
-            return File.ReadAllText(path);
+            return File.ReadAllText(_path);
         }
     }
 }

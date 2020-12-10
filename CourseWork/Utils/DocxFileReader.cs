@@ -10,19 +10,15 @@ namespace CourseWork.Utils
 {
     public class DocxFileReader : FileReader
     {
-        private HttpPostedFileBase _file;
-        public DocxFileReader(HttpPostedFileBase file)
+        public DocxFileReader(HttpPostedFileBase file): base(file)
         {
-            _file = file;
+
         }
+
         public override string Read()
         {
-            var path = EncodingOperation.Context.Server.MapPath(EncodingOperation.FILES_DIRECTORY + "Uploaded.docx");
-            _file.SaveAs(path);
-
-
             string uploadedFileText = "";
-            using (var fs = new FileStream(path, FileMode.Open))
+            using (var fs = new FileStream(_path, FileMode.Open))
             {
                 var doc = DocX.Load(fs);
 
