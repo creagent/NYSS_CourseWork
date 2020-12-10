@@ -20,14 +20,15 @@ namespace CourseWork.Controllers
             ViewBag.Title = _TITLE;
             var operation = new EncodingOperation();
             ViewBag.EncodingOperation = operation;
+
             return View("Main");
         }
 
         [HttpPost]
-        public ViewResult Main(EncodingOperation unit)
+        public ViewResult Main(EncodingOperation operation)
         {
             ViewBag.Title = _TITLE;
-            ViewBag.EncodingOperation = unit;
+            ViewBag.EncodingOperation = operation;
 
             return View("Main");
         }
@@ -37,7 +38,8 @@ namespace CourseWork.Controllers
             string docxPath = Server.MapPath(EncodingOperation.FILES_DIRECTORY + "Template.docx");
             string fileType = "application/docx";
 
-            var resultTextPath = Server.MapPath(EncodingOperation.FILES_DIRECTORY + EncodingOperation.RESULT_TEXT_FILE_NAME);
+            var resultTextPath = Server.MapPath(EncodingOperation.FILES_DIRECTORY + 
+                                                EncodingOperation.RESULT_TEXT_FILE_NAME);
             _resultText = System.IO.File.ReadAllText(resultTextPath);
 
             if (!string.IsNullOrEmpty(_resultText))

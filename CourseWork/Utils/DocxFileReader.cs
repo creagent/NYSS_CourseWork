@@ -18,7 +18,7 @@ namespace CourseWork.Utils
         public override string Read()
         {
             string uploadedFileText = "";
-            using (var fs = new FileStream(_path, FileMode.Open))
+            using (var fs = new FileStream(path, FileMode.Open))
             {
                 var doc = DocX.Load(fs);
 

@@ -16,7 +16,7 @@ namespace CourseWork.Utils
 
         public override string Read()
         {
-            return File.ReadAllText(_path);
+            return File.ReadAllText(path);
         }
     }
 }

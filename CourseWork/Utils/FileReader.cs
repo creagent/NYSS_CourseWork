@@ -8,7 +8,7 @@ namespace CourseWork.Utils
 {
     public abstract class FileReader
     {
-        internal string _path;
+        internal string path;
         public const string FILE_NAME = "Upload";
         public abstract string Read();
 
@@ -18,9 +18,9 @@ namespace CourseWork.Utils
             var extention = uploadFileName[uploadFileName.Length - 1];
             var fullName = FILE_NAME + "." + extention;
 
-            _path = EncodingOperation.Context.Server.MapPath(EncodingOperation.FILES_DIRECTORY + fullName);
+            path = EncodingOperation.Context.Server.MapPath(EncodingOperation.FILES_DIRECTORY + fullName);
 
-            file.SaveAs(_path);
+            file.SaveAs(path);
         }
 
         public static FileReader GetFileReader(HttpPostedFileBase file)
